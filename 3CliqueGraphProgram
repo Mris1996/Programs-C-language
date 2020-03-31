@@ -43,13 +43,22 @@ void checkforisolatednodes() //to check if there are any isolated nodes(1 whole 
             {
                counter++; //counts up every time there is a zero
             }
-            if(j==19){
+            if(j==19){//at the end of each vertex
                 if(counter==20){
                     for(int x=i; x<20; x++){
-                         graph2D[i][x]= rand()%2;
+                             if(x<=i)
+                         {
+                            graph2D[i][j]= 0;   //to obtain symmetry , i set value to one half of the graph as zero first
+                         }
+                            else{
+
+                        graph2D[i][x]= rand()%2;
+
+                        }
+                            //randomizes the numbers again
                     }
                 }
-                counter = 0;
+                counter = 0;//sets the counter back to zero after each vertex
             }
         }
     }
@@ -59,7 +68,7 @@ void checkforisolatednodes() //to check if there are any isolated nodes(1 whole 
         {
             if(j<=i)
             {
-                graph2D[i][j]= graph2D[j][i];
+                graph2D[i][j]= graph2D[j][i];//to regain the symmetry
 
             }
         }
@@ -72,10 +81,10 @@ void print2D()
     {
         for(int j=0; j<20; j++)
         {
-            printf("%d ", graph2D[i][j]);
+            printf("%d ", graph2D[i][j]); //prints the numbers out
             if(j==19)
             {
-                printf("\n");
+                printf("\n");       //new line at the end of each vertex
             }
         }
     }
@@ -91,9 +100,9 @@ void onehop()
             {
                 printf("\nVertex %d:",i);
             }
-            if(graph2D[i][j]==1)
+            if(graph2D[i][j]==1) //if there is one
             {
-                printf("%d ",j);
+                printf("%d ",j); //print out the one-hope neighbor
             }
         }
     }
@@ -109,9 +118,9 @@ void twohop()
             {
                 printf("\nVertex %d:",i);
             }
-            if(graph2D[i][j]==0&&j!=i)
+            if(graph2D[i][j]==0&&j!=i) //if there is zero and its j is not i
             {
-                printf("%d ",j);
+                printf("%d ",j);   //print out the two-hope neighbor
             }
         }
     }
@@ -119,40 +128,40 @@ void twohop()
 void calcedge()
 {
     printf("Number of edges for each node: \n");
-    int counter = 0;
+    int counter = 0;  //initialize a counter
     for(int i=0; i<20; i++)
     {
         for(int j=0; j<20; j++)
         {
             if(graph2D[i][j]==1)
             {
-                counter=counter+1;
+                counter=counter+1;   //counts up each time there is an edge in each vertex
             }
             if(j==19)
             {
                 edges[i]=counter;
-                counter=0;
+                counter=0;   //sets the counter back to 0 at the end of each vertex
             }
         }
     }
     for(int i=0; i<20; i++)
     {
-        printf("vertex %d:%d \n",i, edges[i]);
+        printf("vertex %d:%d \n",i, edges[i]);   //prints edges
     }
     for (int i = 0; i < 20; i++)
     {
-        dense[i]=edges[i];
-        loose[i]=edges[i];
+        dense[i]=edges[i]; //set the values of dense as edge
+        loose[i]=edges[i]; //set the values of loose as edge
     }
     for (int i = 0; i < 20; i++)
     {
         if (dense[0] < dense[i])
         {
-            dense[0] = dense[i];
+            dense[0] = dense[i]; //this would set the biggest number in the array as element 0
         }
         if (loose[0] > loose[i])
         {
-            loose[0] = loose[i];
+            loose[0] = loose[i];//this would set the smallest number in the array as element 0
         }
     }
     printf("\nDensely connected nodes:\n");
@@ -160,7 +169,7 @@ void calcedge()
     {
         if (dense[0] == edges[i])
         {
-            printf("%d ",i);
+            printf("%d ",i); //prints out all the values of every element in dense array
         }
     }
     printf("\nLoosely connected nodes:\n");
@@ -168,13 +177,13 @@ void calcedge()
     {
         if (loose[0] == edges[i])
         {
-            printf("%d ",i);
+            printf("%d ",i);//prints out all the values of every element in loose array
         }
     }
 }
 void clique(){
     int x,y,z;
-    printf("Input 3 vertices (0 to 19)\n");
+    printf("Input 3 vertices (0 to 19)\n");//prompts user to input 3 integers
     printf("\nEnter Vertice[1]:");
     scanf("%d",&x);
     printf("\nEnter Vertice[2]:");
@@ -182,12 +191,53 @@ void clique(){
     printf("\nEnter Vertice[3]:");
     scanf("%d",&z);
     printf("\n");
-    if(edges[x]==dense[0]||edges[y]==dense[0]||edges[z]==dense[0])
+    int counter = 0;
+    if(graph2D[x][y]==1&&graph2D[x][z]==1)
     {
-        printf("Yes, nodes %d, %d and %d are one-hop neighbors and form a 3-Clique.\n\n",x,y,z);
+
+        if(graph2D[y][z]==1){
+         counter+=1;//the x y and z would be placed in the array edges, and verify if any of the elements x ,y or z have the same value as dense[0]
+
+        }
+
+       else if(graph2D[z][y]==1){
+          counter+=1;//the x y and z would be placed in the array edges, and verify if any of the elements x ,y or z have the same value as dense[0]
+
+        }
+        else{
+
+        }
     }
-    else
-    {
+   else if(graph2D[y][x]==1&&graph2D[y][z]==1){
+
+        if(graph2D[x][z]==1){
+         counter+=1;//the x y and z would be placed in the array edges, and verify if any of the elements x ,y or z have the same value as dense[0]
+
+        }
+      else  if(graph2D[z][x]==1){
+          counter+=1;//the x y and z would be placed in the array edges, and verify if any of the elements x ,y or z have the same value as dense[0]
+
+        }
+         else{
+
+        }
+    }
+   else if(graph2D[z][x]==1&&graph2D[z][y]==1){
+
+        if(graph2D[x][y]==1){
+         counter+=1;
+        }
+     else if(graph2D[y][x]==1){
+             counter+=1;
+        }
+         else{
+
+        }
+    }
+    if(counter>0){
+        printf("Yes, nodes %d, %d and %d are one-hop neighbors and form a 3-Clique.\n\n",x,y,z);//the x y and z would be placed in the array edges, and verify if any of the elements x ,y or z have the same value as dense[0]
+    }
+    else if(counter==0){
         printf("No 3-Clique structure found with nodes %d, %d and %d\n\n",x,y,z);
     }
 }
@@ -213,10 +263,10 @@ for(int i = 0;i<inf;i++){
         scanf(" %c",&entry);
         if(entry=='y')
         {
-             inf = inf +1;
+             inf = inf +1;//reset the loop by adding 1 to the value of integer inf.
              entry = 'a';
         }
-        if (entry=='q')
+        if (entry=='q')//breaks the loop as variable inf fulfilled its number of loops
         {
             printf("\n\nThank you!\n===============================\n");
         }
